@@ -1,5 +1,5 @@
 from splinter import Browser
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup as bs
 from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 
@@ -16,7 +16,7 @@ def scrape():
     browser.visit(news_url)
 
     html = browser.html
-    soup = BeautifulSoup(html, "html.parser")
+    soup = bs(html, "html.parser")
 
     titles = soup.find_all('div', class_='content_title')[0].text
     paragraphs  = soup.find_all('div', class_='article_teaser_body')[0].text
@@ -25,16 +25,17 @@ def scrape():
     jpl_url = "https://spaceimages-mars.com/"
     browser.visit(jpl_url)
 
-    featured_image_url = soup.find('img', class_="headerimage fade-in")['src']
-
+    html = browser.html
+    soup = bs(html, 'html.parser')
+    image_url = soup.find_all('img', class_="headerimage fade-in")[0]['src']
+    featured_image_url =  jpl_url + image_url
     # Mars Facts
 
-    fact_url = "https://galaxyfacts-mars.com/"
-    tables = pd.read_html(fact_url)
+    facts_url = "https://galaxyfacts-mars.com/"
+    tables = pd.read_html(facts_url)
 
     fact_df = tables[0]
-    fact_df = fact_df.rename(columns={
-        0: "Mars - Earth Comparison", 1: "Mars", 2: "Earth"})
+    fact_df = fact_df.rename(columns={0: "Mars - Earth Comparison", 1: "Mars", 2: "Earth"})
 
     fact_df = fact_df.drop([0, 0])
     fact_df.set_index("Mars - Earth Comparison", inplace=True)
@@ -64,9 +65,7 @@ def scrape():
             soup = bs(html, 'html.parser')
             image_src = soup.find('li').a['href']
 
-            image_url = soup.find('img', class_="wide-image")['src']
-            print(text + ": \n" + image_url + "\n")
-
+            image_url = hemis_url + soup.find('img',class_="wide-image")['src']
             hemisphere_dict = {
                 "titles": text,
                 "img_url": image_url

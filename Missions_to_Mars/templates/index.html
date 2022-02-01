@@ -24,6 +24,28 @@
       <p>{{mars.news_p}}</p>
     </div>
 
+    <div class="row">
+      <div class="col-md-8 border">
+        <h2>Featured Mars Image</h2> 
+        <img src="{{mars.featured_image}}" >
+      </div>
+
+      <div class="col-md-4">
+        <h4>Mars Facts</h4>
+        {{mars.html_table | safe}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <h2 style="text-align: center;">Mars Hemispheres </h2>
+        <hr>
+        <br>
+        {% for hemispheres in mars.hemisphere_image_urls %}
+        <img width="225 px" height="225 px" src="{{ hemispheres.img_url}}">
+        {% endfor %}
+      </div>
+    </div>
   </div>
 </body>
 
