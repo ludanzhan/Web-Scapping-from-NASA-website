@@ -68,7 +68,7 @@ def scrape():
             image_url = hemis_url + soup.find('img',class_="wide-image")['src']
             hemisphere_dict = {
                 "titles": text,
-                "img_url": image_url
+                "imgurl": image_url
             }
 
             hemisphere_image_urls.append(hemisphere_dict)
